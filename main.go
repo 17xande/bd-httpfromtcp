@@ -26,13 +26,13 @@ func main() {
 		if err != nil {
 			fmt.Printf("error: %v", err)
 		}
-		log.Println("connection accepted")
+		log.Printf("connection accepted from %s\n", conn.RemoteAddr())
 		linesChan := getLinesChannel(conn)
 		for line := range linesChan {
 			fmt.Println("read:", line)
 		}
 
-		log.Println("connection closed")
+		log.Println("connection from", conn.RemoteAddr(), "closed")
 	}
 }
 
@@ -43,7 +43,7 @@ func getLinesChannel(c net.Conn) <-chan string {
 		currentLineContents := ""
 		for {
 
-			b := make([]byte, 8, 8)
+			b := make([]byte, 8)
 			n, err := c.Read(b)
 			if err != nil {
 				if currentLineContents != "" {
