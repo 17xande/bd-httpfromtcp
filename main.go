@@ -20,18 +20,20 @@ func main() {
 	fmt.Printf("Reading data from TCP %s\n", port)
 	fmt.Println("=====================================")
 
-	// for {
-	// Wait for a connection
-	conn, err := l.Accept()
-	if err != nil {
-		fmt.Printf("error: %v", err)
-	}
-	linesChan := getLinesChannel(conn)
-	for line := range linesChan {
-		fmt.Println("read:", line)
+	for {
+		// Wait for a connection
+		conn, err := l.Accept()
+		if err != nil {
+			fmt.Printf("error: %v", err)
+		}
+		log.Println("connection accepted")
+		linesChan := getLinesChannel(conn)
+		for line := range linesChan {
+			fmt.Println("read:", line)
+		}
 
+		log.Println("connection closed")
 	}
-
 }
 
 func getLinesChannel(c net.Conn) <-chan string {
